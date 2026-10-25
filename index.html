@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rocket VA Slides</title>
+<style>
+  :root { --bg:#111; --fg:#eee; --muted:#888; --accent:#4c9aff; --bar:#1b1b1b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg);
+    font:14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow:hidden; }
+  #app { display:flex; flex-direction:column; height:100%; }
+  #stage { flex:1; min-height:0; position:relative; display:flex; align-items:center; justify-content:center; padding:12px 56px; }
+  #stage img { max-width:100%; max-height:100%; object-fit:contain; border-radius:4px; box-shadow:0 4px 24px rgba(0,0,0,.6); user-select:none; }
+  .nav { position:absolute; top:0; bottom:0; width:56px; border:0; background:transparent; color:var(--fg);
+    font-size:32px; cursor:pointer; opacity:.5; transition:opacity .15s, background .15s; }
+  .nav:hover { opacity:1; background:rgba(255,255,255,.05); }
+  .nav:disabled { opacity:.1; cursor:default; background:transparent; }
+  #prev { left:0; } #next { right:0; }
+  #bar { display:flex; align-items:center; gap:12px; padding:8px 14px; background:var(--bar); border-top:1px solid #2a2a2a; }
+  #count { color:var(--muted); font-variant-numeric:tabular-nums; min-width:70px; }
+  #name { color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #bar button { background:#2a2a2a; color:var(--fg); border:0; border-radius:4px; padding:5px 10px; cursor:pointer; font:inherit; }
+  #bar button:hover { background:#3a3a3a; }
+  #strip { display:flex; gap:6px; padding:8px 12px; overflow-x:auto; background:var(--bar); scrollbar-width:thin; }
+  #strip img { height:56px; width:auto; border-radius:3px; opacity:.5; cursor:pointer; border:2px solid transparent; flex:none; }
+  #strip img:hover { opacity:.85; }
+  #strip img.active { opacity:1; border-color:var(--accent); }
+  body.hide-strip #strip { display:none; }
+  body.full #bar, body.full #strip { display:none; }
+  body.full #stage { padding:0 56px; }
+  @media (max-width:600px) { #stage { padding:8px 0; } .nav { display:none; } #name { display:none; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <button class="nav" id="prev" aria-label="Previous slide">&#8249;</button>
+    <img id="slide" alt="">
+    <button class="nav" id="next" aria-label="Next slide">&#8250;</button>
+  </div>
+  <div id="bar">
+    <span id="count"></span>
+    <span id="name"></span>
+    <button id="toggleStrip" title="Toggle thumbnails (T)">Thumbnails</button>
+    <button id="fs" title="Fullscreen (F)">Fullscreen</button>
+  </div>
+  <div id="strip"></div>
+</div>
+
+<script>
+(function () {
+  var TOTAL = 57;
+  var files = [];
+  for (var n = 1; n <= TOTAL; n++) files.push("rocket-" + String(n).padStart(3, "0") + ".png");
+
+  var slide = document.getElementById("slide");
+  var count = document.getElementById("count");
+  var name = document.getElementById("name");
+  var strip = document.getElementById("strip");
+  var prev = document.getElementById("prev");
+  var next = document.getElementById("next");
+  var cur = 0;
+
+  var thumbs = files.map(function (f, i) {
+    var t = document.createElement("img");
+    t.src = f; t.loading = "lazy"; t.alt = f;
+    t.addEventListener("click", function () { go(i); });
+    strip.appendChild(t);
+    return t;
+  });
+
+  function go(i) {
+    cur = Math.max(0, Math.min(files.length - 1, i));
+    slide.src = files[cur];
+    slide.alt = files[cur];
+    count.textContent = (cur + 1) + " / " + files.length;
+    name.textContent = files[cur];
+    prev.disabled = cur === 0;
+    next.disabled = cur === files.length - 1;
+    thumbs.forEach(function (t, j) { t.classList.toggle("active", j === cur); });
+    thumbs[cur].scrollIntoView({ block: "nearest", inline: "center" });
+    history.replaceState(null, "", "#" + (cur + 1));
+    // preload neighbours
+    [cur + 1, cur - 1].forEach(function (j) { if (files[j]) new Image().src = files[j]; });
+  }
+
+  function toggleFull() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+  }
+
+  prev.addEventListener("click", function () { go(cur - 1); });
+  next.addEventListener("click", function () { go(cur + 1); });
+  slide.addEventListener("click", function () { go(cur + 1); });
+  document.getElementById("fs").addEventListener("click", toggleFull);
+  document.getElementById("toggleStrip").addEventListener("click", function () { document.body.classList.toggle("hide-strip"); });
+  document.addEventListener("fullscreenchange", function () { document.body.classList.toggle("full", !!document.fullscreenElement); });
+
+  document.addEventListener("keydown", function (e) {
+    switch (e.key) {
+      case "ArrowRight": case "PageDown": case " ": case "Enter": e.preventDefault(); go(cur + 1); break;
+      case "ArrowLeft": case "PageUp": case "Backspace": e.preventDefault(); go(cur - 1); break;
+      case "Home": go(0); break;
+      case "End": go(files.length - 1); break;
+      case "f": case "F": toggleFull(); break;
+      case "t": case "T": document.body.classList.toggle("hide-strip"); break;
+    }
+  });
+
+  var x0 = null;
+  document.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener("touchend", function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  var start = parseInt(location.hash.slice(1), 10);
+  go(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
