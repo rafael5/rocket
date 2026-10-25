@@ -4,7 +4,9 @@
 
 Rocket is a modern, open-source desktop EHR client for the U.S. Department of Veterans Affairs VistA (Veterans Health Information Systems and Technology Architecture) system. It reimagines the 25-year-old CPRS (Computerized Patient Record System) using today's technology, while keeping full compatibility with the existing VistA RPC Broker infrastructure.
 
-Rocket is a replacement for CPRS that focuses on **SI (Super Intelligence)**, modularity, and performance.
+Rocket is a replacement for CPRS that focuses on **SI (Super Intelligence)**, modularity, and performance. It is the brainchild of **Daniel Breznau**.
+
+**Project page author:** Frank S. Drescher, Physician (VA SI Resources SharePoint site)
 
 **Status:** Active development (Stage 4: Clinical Pages)
 
