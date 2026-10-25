@@ -1,8 +1,94 @@
-# Rocket VA Screenshots
+# Rocket: Modern VistA Electronic Health Record Client
 
 **[▶ View as online slide show](https://rafael5.github.io/rocket/)** &nbsp;|&nbsp; **[📄 Download PDF slide deck](rocket-slides.pdf)**
 
-Thumbnail preview of all screenshots. Click any image to view it full size.
+Rocket is a modern, open-source desktop EHR client for the U.S. Department of Veterans Affairs VistA (Veterans Health Information Systems and Technology Architecture) system. It reimagines the 25-year-old CPRS (Computerized Patient Record System) using today's technology, while keeping full compatibility with the existing VistA RPC Broker infrastructure.
+
+Rocket is a replacement for CPRS that focuses on **SI (Super Intelligence)**, modularity, and performance.
+
+**Status:** Active development (Stage 4: Clinical Pages)
+
+- Source is embedded in ADOS (`Rocket / README.md`).
+- A compiled executable is available on the VA SI Resources SharePoint site, under Wiki → Downloads.
+- Screenshots of the UI are not yet available, because the UI is under active development. The images below are the project's SharePoint documentation pages.
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Desktop shell | Tauri 2 (Rust) |
+| UI framework | React 19 + TypeScript |
+| State management | Zustand |
+| Styling | Tailwind CSS 4 |
+| Routing | React Router 7 |
+| RPC transport | Rust (tokio, native-tls), XWB protocol over TCP |
+| SI integration | Rust → AWS Bedrock (Claude) |
+| Runtime | Bun |
+| Build | Vite 6 |
+| Icons | Lucide React |
+
+## Features
+
+### Implemented
+
+- **VistA RPC Broker:** full XWB protocol implementation in Rust (TCP + TLS)
+- **PIV / SSOi authentication:** smart card login via IAM STS SAML tokens
+- **Multi-patient tabs:** browser-style tab bar for multiple patients
+- **Cover Sheet:** dashboard with allergies, problems, meds, vitals, labs, reminders
+- **Clinical pages:** Notes, Problems, Medications, Orders, Labs, Consults, Reports, Vitals, Surgery, D/C Summaries, Imaging
+- **SI panel:** integrated SI analysis (Assessment & Plan, Dx List, Safety Checks, etc.) via AWS Bedrock
+- **Medical references:** point-of-care clinical decision support built into the SI agent (see below)
+- **Command palette:** Ctrl+K quick navigation and order search
+- **Dark / Light / Auto theme:** follows the Windows system preference
+- **Plugin system:** extensible architecture for custom pages, widgets, and SI prompts
+- **Auto-update:** network share-based shadow copy updater
+- **Site auto-detection:** reads the machine hostname to auto-select the VistA server
+
+### Planned
+
+- Order entry dialogs (complex orders, order sets)
+- Note authoring with a template system
+- CCOW patient context sharing
+- Patient timeline (unified chronological view)
+- 508 accessibility compliance
+
+## Medical references (point-of-care)
+
+Rocket's SI agent includes built-in access to medical reference data, enabling evidence-based clinical decision support without any local databases or commercial subscriptions. All data is fetched on demand from free public APIs.
+
+### Clinical calculators (40+)
+
+Compiled directly into the Rust binary: no API calls, instant results. Each returns an exact score, a clinical interpretation, and a literature citation.
+
+| Category | Calculators |
+|---|---|
+| Cardiovascular | Wells DVT, Wells PE, CHA2DS2-VASc, HAS-BLED, HEART, TIMI NSTEMI/STEMI, GRACE, ASCVD Risk, MAP, QTc (Bazett) |
+| Pulmonary | CURB-65, PERC Rule |
+| Critical care | qSOFA, SOFA, APACHE II |
+| Renal / metabolic | Cockcroft-Gault, CKD-EPI 2021 eGFR, Corrected Calcium, Anion Gap, FENa, Winter's Formula, BMI |
+| GI / hepatology | MELD-Na, Child-Pugh, FIB-4, Alvarado, Maddrey DF, West Haven |
+| VTE prophylaxis | Padua VTE Risk, Caprini |
+| Neurology | GCS, NIHSS, ABCD2 |
+| Psychiatry | PHQ-9, GAD-7, AUDIT-C, CAGE, C-SSRS, MoCA/MMSE, 4AT Delirium |
+| ENT | Modified Centor |
+| Conversions | Steroid equivalence, Opioid MME |
+
+### Drug reference APIs
+
+| Source | Data provided | API |
+|---|---|---|
+| DailyMed (NLM) | Full FDA drug labels: indications, dosing, contraindications, black box warnings, adverse reactions | dailymed.nlm.nih.gov |
+| RxNorm (NLM) | Drug name normalization: brand ↔ generic ↔ ingredient mapping | rxnav.nlm.nih.gov |
+| MED-RT / RxClass (NLM) | VA drug classes, mechanism of action, pharmacologic class | rxnav.nlm.nih.gov |
+| RxNorm Interactions (NLM) | Drug-drug interaction checking with severity ratings | rxnav.nlm.nih.gov |
+| OpenFDA (FDA) | Post-market adverse event data (FAERS) | api.fda.gov |
+| PubMed (NLM) | Systematic reviews, meta-analyses, clinical trials | eutils.ncbi.nlm.nih.gov |
+
+All APIs are free, require no authentication, and are provided by NIH/NLM/FDA as public health resources.
+
+## Slide gallery
+
+Source slides for this summary are `rocket-001.png` to `rocket-010.png`. Click any thumbnail to view it full size.
 
 <table>
   <tr>
