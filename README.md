@@ -1,6 +1,6 @@
 # Rocket VA Screenshots
 
-**[▶ View as slide deck](https://rafael5.github.io/rocket/)**
+**[▶ View as online slide show](https://rafael5.github.io/rocket/)** &nbsp;|&nbsp; **[📄 Download PDF slide deck](rocket-slides.pdf)**
 
 Thumbnail preview of all screenshots. Click any image to view it full size.
 
