@@ -88,6 +88,41 @@ Compiled directly into the Rust binary: no API calls, instant results. Each retu
 
 All APIs are free, require no authentication, and are provided by NIH/NLM/FDA as public health resources.
 
+## Lots of new features
+
+Highlights from the overview slide ([rocket-055](rocket-055.png)).
+
+**Core pillars**
+
+- Search orders, labs, and notes
+- Plugin architecture for expansions
+- Lightning-fast modern code
+- Direct connections to PACS, Muse, CDS, etc.
+- Native AI tools (agentic, etc.)
+- Color themes
+
+**More**
+
+- Bulk readmission analysis
+- Pre-charting summary
+- Ambient scribe built in
+- Streamlined processing of View Alerts
+- AI-enhanced spellcheck
+- Care team links to Teams
+- Enhanced lab view
+- Feedback submission
+- Synonym matches in search
+- Undo / redo
+- Customizable interface
+- Note formatting, backwards compatible
+- Highlights notes of the same specialty as the user
+
+## Support team
+
+Acknowledged on the closing "Thank you" slide ([rocket-056](rocket-056.png)), as listed there (VA Desert Pacific Healthcare Network, VISN 22):
+
+Timothy Strebel MS, Simon Bernatz MD, Gregory Myers MS, Erik Offerman MD, Eric Zuniga MD, Cy Kim MD, Angie Ng MD, James Iwaz MD, Leonard Nurnberg MS, Sunny Singh MS, Evan Carey PhD, Michael Kim MD, Spencer Schaefer PharmD, Jeannie Yu MD, Amilcare Gentili MD, Hugo Aerts PhD, Peter Nguyen MD, Stephen Manuwa MHA, Leanne Farestveit MD, Christina Mansour MD, Longco Nguyen MD, Anish Kolan MD, Hania Shahin MD, Alexander Johnson DO, Aniket Dehadrai, Shray Paliwal, Tim Assimes MD PhD, Shoa Clarke MD PhD, Philip Tsao PhD, Rodrigo Sousa PhD, Jiayan Zhou PhD, Austin Hilliard PhD, Eun Han PhD, Elise Gunzburger MS, the NAII/ANT team, Daniel Breznau MD, and Angela Grant-Curtis.
+
 ## Slide gallery
 
 Source slides for this summary are `rocket-001.png` to `rocket-010.png`. Click any thumbnail to view it full size.
